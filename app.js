@@ -1,27 +1,59 @@
 /* requerir módulo autos */
-let autos = require("./autos")
+let autosRequeridos = require("./autos")
+
 const concesionaria = {
-    autos: autos.conca,
+    autos: autosRequeridos,
 
     buscarAuto: function (patente){
+        let resultado;
          for (let i = 0; i < this.autos.length; i++) {
              
             if (this.autos[i].patente == patente) {
-                return autos[i]
+                
+                resultado = this.autos[i];
+                
             }else{
-                return null
+                
+                resultado = null;
             }
              
          }
+         return resultado;
     },
 
     venderAuto: function (patente){
         let auto = this.buscarAuto(patente)
         auto.vendido = true
-
+        console.log(this.autos)
     },
+
+    autosParaLaVenta: function(){
+        let resultado = this.autos.filter(auto => auto.vendido === false );
+        return resultado;
+    },
+
+    autosNuevos: function(){    
+        let autosEnVenta = this.autosParaLaVenta()
+
+        return autosEnVenta.filter(auto => auto.km < 100)
+    },
+
+    listaDeVentas: function(){
+        let autosVendidos = this.autos.filter(auto => auto.vendido === true );
+        let preciosDeVenta = []
+        for (let i = 0; i < autosVendidos.length; i++) {
+            preciosDeVenta[i] = autosVendidos[i].precio;
+            
+        }
+        return preciosDeVenta;
+    },
+
+    totalDeVentas: function(){
+        preciosDeVenta = this.listaDeVentas()
+        let totalVentas = preciosDeVenta.reduce((total,precio) => total += precio,0)
+        return totalVentas;
+    }
    
 };
 
-console.log(autos.length);
-console.log(concesionaria.buscar("APL123"))
+console.log(concesionaria.totalDeVentas()); 
