@@ -1,6 +1,13 @@
 /* requerir módulo autos */
 let autosRequeridos = require("./autos")
 
+let persona = {
+    nombre: "Juan",
+    capacidadDePagoEnCuotas: 1000000 ,
+    capacidadDePagoTotal: 100000,
+    }
+
+
 const concesionaria = {
     autos: autosRequeridos,
 
@@ -52,8 +59,29 @@ const concesionaria = {
         preciosDeVenta = this.listaDeVentas()
         let totalVentas = preciosDeVenta.reduce((total,precio) => total += precio,0)
         return totalVentas;
+    },
+    puedeComprar: function(auto,persona){
+        let resultado
+        if(auto.precio <= persona.capacidadDePagoTotal && auto.precio/auto.cuotas <= persona.capacidadDePagoEnCuotas){
+            resultado =  true;
+        }else{
+            resultado =  false;
+        }
+        return resultado;
+
+    },
+
+    autosQuePuedeComprar: function(persona){
+        let autosEnVenta = this.autosParaLaVenta();
+        let resultado = [];
+        for (let i = 0; i < autosEnVenta.length; i++) {
+            if(this.puedeComprar(autosEnVenta[i],persona)){
+                resultado = [...resultado, autosEnVenta[i]]
+            }
+        }
+        return resultado;
     }
    
 };
 
-console.log(concesionaria.totalDeVentas()); 
+console.log(concesionaria.autosQuePuedeComprar(persona)); 
